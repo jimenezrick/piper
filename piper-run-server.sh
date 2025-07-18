@@ -24,8 +24,14 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 	source .env/bin/activate
 
-	echo 'Sure, you are welcome to fuck yourself!' | piper \
-	    --cuda --model $MODEL \
-	    --output-raw | \
-	    aplay -r 22050 -f S16_LE -t raw -
+	if [ $# -gt 0 ]
+	then
+		cat $1 | piper \
+		    --cuda --model $MODEL \
+		    --output-raw | \
+		    aplay -r 22050 -f S16_LE -t raw -
+	else
+		echo 'Error: no path provided' >&2
+		exit 1
+	fi
 )
